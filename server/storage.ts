@@ -9,7 +9,6 @@ export class MemStorage implements IStorage {
   private mapPeriods: MapPeriod[];
 
   constructor() {
-    // Initialize with some basic historical periods
     this.mapPeriods = [
       {
         id: 1,
@@ -18,7 +17,22 @@ export class MemStorage implements IStorage {
         endYear: 2024,
         geoData: JSON.stringify({
           type: "FeatureCollection",
-          features: [] // Modern world map GeoJSON
+          features: [{
+            type: "Feature",
+            geometry: {
+              type: "Polygon",
+              coordinates: [[
+                [-180, 90],
+                [180, 90],
+                [180, -90],
+                [-180, -90],
+                [-180, 90]
+              ]]
+            },
+            properties: {
+              name: "World"
+            }
+          }]
         })
       },
       {
@@ -28,7 +42,22 @@ export class MemStorage implements IStorage {
         endYear: -10000,
         geoData: JSON.stringify({
           type: "FeatureCollection",
-          features: [] // Ice age map GeoJSON
+          features: [{
+            type: "Feature",
+            geometry: {
+              type: "Polygon",
+              coordinates: [[
+                [-180, 85],
+                [180, 85],
+                [180, -85],
+                [-180, -85],
+                [-180, 85]
+              ]]
+            },
+            properties: {
+              name: "Ice Age World"
+            }
+          }]
         })
       }
     ];

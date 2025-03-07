@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function MapVisualization({ year, view, onViewChange }: Props) {
-  const { data: mapData, isLoading } = useQuery<MapPeriod>({
+  const { data: mapData, isLoading, error } = useQuery<MapPeriod>({
     queryKey: [`/api/map-period/${year}`],
   });
 
@@ -28,9 +28,26 @@ export default function MapVisualization({ year, view, onViewChange }: Props) {
     return <div className="w-full h-[600px] animate-pulse bg-gray-200" />;
   }
 
+  if (error) {
+    console.error("Map data error:", error);
+    return <div className="w-full h-[600px] flex items-center justify-center text-red-500">
+      Error loading map data
+    </div>;
+  }
+
   if (!mapData) {
     return <div className="w-full h-[600px] flex items-center justify-center text-gray-500">
       No map data available for year {year}
+    </div>;
+  }
+
+  let geoData;
+  try {
+    geoData = JSON.parse(mapData.geoData);
+  } catch (e) {
+    console.error("Failed to parse map data:", e);
+    return <div className="w-full h-[600px] flex items-center justify-center text-red-500">
+      Invalid map data format
     </div>;
   }
 
@@ -38,13 +55,13 @@ export default function MapVisualization({ year, view, onViewChange }: Props) {
     <div className="w-full h-[600px] border rounded-lg overflow-hidden"
          onWheel={handleZoom}>
       <ComposableMap
-        projection="geoMercator"
+        projection="geoEquirectangular"
         projectionConfig={{
           scale: 100 * view.zoom,
           center: view.center
         }}
       >
-        <Geographies geography={JSON.parse(mapData.geoData)}>
+        <Geographies geography={geoData}>
           {({ geographies }) =>
             geographies.map((geo) => (
               <Geography
