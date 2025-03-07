@@ -44,6 +44,7 @@ export default function MapVisualization({ year, view, onViewChange }: Props) {
   let geoData;
   try {
     geoData = JSON.parse(mapData.geoData);
+    console.log("Parsed GeoData:", geoData); // Debug log
   } catch (e) {
     console.error("Failed to parse map data:", e);
     return <div className="w-full h-[600px] flex items-center justify-center text-red-500">
@@ -57,7 +58,7 @@ export default function MapVisualization({ year, view, onViewChange }: Props) {
       <ComposableMap
         projection="geoEquirectangular"
         projectionConfig={{
-          scale: 100 * view.zoom,
+          scale: 150 * view.zoom,
           center: view.center
         }}
       >

@@ -20,17 +20,33 @@ export class MemStorage implements IStorage {
           features: [{
             type: "Feature",
             geometry: {
-              type: "Polygon",
-              coordinates: [[
-                [-180, 90],
-                [180, 90],
-                [180, -90],
-                [-180, -90],
-                [-180, 90]
-              ]]
+              type: "MultiPolygon",
+              coordinates: [
+                [[
+                  [-60, 30],
+                  [60, 30],
+                  [60, -30],
+                  [-60, -30],
+                  [-60, 30]
+                ]],
+                [[
+                  [-120, 60],
+                  [-60, 60],
+                  [-60, 20],
+                  [-120, 20],
+                  [-120, 60]
+                ]],
+                [[
+                  [60, 60],
+                  [120, 60],
+                  [120, 20],
+                  [60, 20],
+                  [60, 60]
+                ]]
+              ]
             },
             properties: {
-              name: "World"
+              name: "Continents"
             }
           }]
         })
@@ -45,17 +61,33 @@ export class MemStorage implements IStorage {
           features: [{
             type: "Feature",
             geometry: {
-              type: "Polygon",
-              coordinates: [[
-                [-180, 85],
-                [180, 85],
-                [180, -85],
-                [-180, -85],
-                [-180, 85]
-              ]]
+              type: "MultiPolygon",
+              coordinates: [
+                [[
+                  [-60, 60],
+                  [60, 60],
+                  [60, -30],
+                  [-60, -30],
+                  [-60, 60]
+                ]],
+                [[
+                  [-120, 85],
+                  [-60, 85],
+                  [-60, 40],
+                  [-120, 40],
+                  [-120, 85]
+                ]],
+                [[
+                  [60, 85],
+                  [120, 85],
+                  [120, 40],
+                  [60, 40],
+                  [60, 85]
+                ]]
+              ]
             },
             properties: {
-              name: "Ice Age World"
+              name: "Ice Age Continents"
             }
           }]
         })
