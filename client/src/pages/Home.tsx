@@ -28,7 +28,7 @@ export default function Home() {
     setMapState(prev => ({ ...prev, isTimeScroll: enabled }));
   }, []);
 
-  const handleScroll = useCallback((event: WheelEvent) => {
+  const handleScroll = useCallback((event: React.WheelEvent<HTMLDivElement>) => {
     if (!mapState.isTimeScroll) return;
 
     event.preventDefault();
@@ -47,7 +47,7 @@ export default function Home() {
   return (
     <div className="container mx-auto py-8 space-y-4">
       <h1 className="text-4xl font-bold mb-8">Historical World Map</h1>
-      
+
       <TimeControls
         timeRange={mapState.timeRange}
         isTimeScroll={mapState.isTimeScroll}

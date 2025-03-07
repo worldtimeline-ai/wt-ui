@@ -11,11 +11,11 @@ interface Props {
 }
 
 export default function MapVisualization({ year, view, onViewChange }: Props) {
-  const { data: mapData, isLoading } = useQuery({
-    queryKey: ["/api/map-period", year],
+  const { data: mapData, isLoading } = useQuery<MapPeriod>({
+    queryKey: [`/api/map-period/${year}`],
   });
 
-  const handleZoom = (event: WheelEvent) => {
+  const handleZoom = (event: React.WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
     const newZoom = view.zoom - event.deltaY * 0.001;
     onViewChange({
@@ -28,6 +28,12 @@ export default function MapVisualization({ year, view, onViewChange }: Props) {
     return <div className="w-full h-[600px] animate-pulse bg-gray-200" />;
   }
 
+  if (!mapData) {
+    return <div className="w-full h-[600px] flex items-center justify-center text-gray-500">
+      No map data available for year {year}
+    </div>;
+  }
+
   return (
     <div className="w-full h-[600px] border rounded-lg overflow-hidden"
          onWheel={handleZoom}>
@@ -38,25 +44,23 @@ export default function MapVisualization({ year, view, onViewChange }: Props) {
           center: view.center
         }}
       >
-        {mapData && (
-          <Geographies geography={JSON.parse(mapData.geoData)}>
-            {({ geographies }) =>
-              geographies.map((geo) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill="#EAEAEC"
-                  stroke="#D6D6DA"
-                  style={{
-                    default: { outline: "none" },
-                    hover: { outline: "none", fill: "#F53" },
-                    pressed: { outline: "none" }
-                  }}
-                />
-              ))
-            }
-          </Geographies>
-        )}
+        <Geographies geography={JSON.parse(mapData.geoData)}>
+          {({ geographies }) =>
+            geographies.map((geo) => (
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                fill="#EAEAEC"
+                stroke="#D6D6DA"
+                style={{
+                  default: { outline: "none" },
+                  hover: { outline: "none", fill: "#F53" },
+                  pressed: { outline: "none" }
+                }}
+              />
+            ))
+          }
+        </Geographies>
       </ComposableMap>
     </div>
   );
