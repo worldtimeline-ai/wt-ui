@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,10 +22,28 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@shared/*": ["./shared/*"] // Retaining this from original config
-    }
+      "@/*": [
+        "./*"
+      ],
+      "@shared/*": [
+        "./shared/*"
+      ] // Retaining this from original config
+    },
+    "target": "ES2017"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "client/src/**/*", "shared/**/*", "server/**/*"], // Combining include statements
-  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"] // Combining exclude statements
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "client/src/**/*",
+    "shared/**/*",
+    "server/**/*"
+  ], // Combining include statements
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "**/*.test.ts"
+  ] // Combining exclude statements
 }

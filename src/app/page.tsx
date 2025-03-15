@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useCallback } from "react";
-import MapVisualization from "@/components/MapVisualization";
-import TimeControls from "@/components/TimeControls";
-import type { MapState, TimeRange, ViewState } from "@/types";
+import dynamic from "next/dynamic"
+import TimeControls from "@/src/components/TimeControls";
+import type { MapState, TimeRange, ViewState } from "@/src/types";
+
+const MyMap = dynamic(() => import("@/src/components/MyMap"), { ssr: false })
 
 export default function Home() {
   const [mapState, setMapState] = useState<MapState>({
@@ -47,8 +49,15 @@ export default function Home() {
   }, [mapState.isTimeScroll, mapState.timeRange]);
 
   return (
-    <main className="container mx-auto py-8 space-y-4">
-      <h1 className="text-4xl font-bold mb-8">Historical World Map</h1>
+    <main className="relative h-screen w-screen">
+      {/* <h1 className="text-4xl font-bold mb-8">Historical World Map</h1> */}
+
+      {/* <div onWheel={handleScroll}> */}
+        <MyMap
+          // view={mapState.view}
+          // onViewChange={handleViewChange}
+        />
+      {/* </div> */}
 
       <TimeControls
         timeRange={mapState.timeRange}
@@ -56,14 +65,6 @@ export default function Home() {
         onTimeChange={handleTimeChange}
         onToggleTimeScroll={handleToggleTimeScroll}
       />
-
-      <div onWheel={handleScroll}>
-        <MapVisualization
-          year={Math.floor((mapState.timeRange.start + mapState.timeRange.end) / 2)}
-          view={mapState.view}
-          onViewChange={handleViewChange}
-        />
-      </div>
     </main>
   );
 }

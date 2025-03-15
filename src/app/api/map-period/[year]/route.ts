@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getMapPeriodForYear } from '@/lib/mapData';
+import { getMapPeriodForYear } from '@/src/lib/mapData';
 
 export async function GET(
   request: Request,

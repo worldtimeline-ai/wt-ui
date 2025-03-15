@@ -1,4 +1,4 @@
-import { MapPeriod } from "@/types";
+import { MapPeriod } from "@/src/types";
 
 const mapPeriods: MapPeriod[] = [
   {
