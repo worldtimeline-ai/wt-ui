@@ -3,7 +3,8 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import MyMapComponent from "./MyMapComponent";
 
 // Fix the default marker icon issue in Next.js
 const icon = L.icon({
@@ -12,7 +13,7 @@ const icon = L.icon({
   iconAnchor: [12, 41],
 });
 
-export default function MyMap() {
+export default function MyMap(props) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function MyMap() {
         <Marker position={[28.6139, 77.2090]} icon={icon}>
           <Popup>Delhi, India</Popup>
         </Marker>
+        <MyMapComponent {...props} />
       </MapContainer>
     </div>
   );

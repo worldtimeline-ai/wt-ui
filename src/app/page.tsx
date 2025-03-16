@@ -53,7 +53,7 @@ export default function Home() {
       {/* <h1 className="text-4xl font-bold mb-8">Historical World Map</h1> */}
 
       {/* <div onWheel={handleScroll}> */}
-        <MyMap
+      <MyMap mapState={mapState} setMapState={setMapState}
           // view={mapState.view}
           // onViewChange={handleViewChange}
         />
