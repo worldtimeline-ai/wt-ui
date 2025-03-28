@@ -1,70 +1,43 @@
 'use client';
 
-import { useState, useCallback } from "react";
-import dynamic from "next/dynamic"
-import TimeControls from "@/src/components/TimeControls";
-import type { MapState, TimeRange, ViewState } from "@/src/types";
-
-const MyMap = dynamic(() => import("@/src/components/MyMap"), { ssr: false })
+import { useState, useRef, useEffect } from "react";
+import type { MapState } from "@/src/types";
+import YearRangeSelector from "../components/YearRangeSelector";
+import WTGoogleMap from "../components/WTGoogleMap";
 
 export default function Home() {
+  const mainRef = useRef<HTMLElement>(null);
   const [mapState, setMapState] = useState<MapState>({
-    timeRange: {
-      start: 1900,
-      end: 2024
+    year: {
+      start: 2015,
+      end: 2025
     },
     view: {
-      center: [0, 20],
-      zoom: 1
-    },
-    isTimeScroll: false
+      center: { lat: 28.6139, lng: 77.2090 },
+      zoom: 7
+    }
   });
 
-  const handleTimeChange = useCallback((timeRange: TimeRange) => {
-    setMapState(prev => ({ ...prev, timeRange }));
-  }, []);
+  console.log(mapState);
 
-  const handleViewChange = useCallback((view: ViewState) => {
-    setMapState(prev => ({ ...prev, view }));
-  }, []);
-
-  const handleToggleTimeScroll = useCallback((enabled: boolean) => {
-    setMapState(prev => ({ ...prev, isTimeScroll: enabled }));
-  }, []);
-
-  const handleScroll = useCallback((event: React.WheelEvent<HTMLDivElement>) => {
-    if (!mapState.isTimeScroll) return;
-
-    event.preventDefault();
-    const timeSpan = mapState.timeRange.end - mapState.timeRange.start;
-    const shift = event.deltaY * timeSpan * 0.001;
-
-    setMapState(prev => ({
-      ...prev,
-      timeRange: {
-        start: prev.timeRange.start + shift,
-        end: prev.timeRange.end + shift
+  useEffect(() => {
+    const handleTouchMove = (event: TouchEvent) => {
+      if (mainRef.current) {
+        event.preventDefault();
       }
-    }));
-  }, [mapState.isTimeScroll, mapState.timeRange]);
+    };
+    document.body.style.overflow = "hidden";
+    mainRef.current?.addEventListener("touchmove", handleTouchMove, { passive: false });
+    return () => {
+      document.body.style.overflow = "";
+      mainRef.current?.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, []);
 
   return (
-    <main className="relative h-screen w-screen">
-      {/* <h1 className="text-4xl font-bold mb-8">Historical World Map</h1> */}
-
-      {/* <div onWheel={handleScroll}> */}
-      <MyMap mapState={mapState} setMapState={setMapState}
-          // view={mapState.view}
-          // onViewChange={handleViewChange}
-        />
-      {/* </div> */}
-
-      <TimeControls
-        timeRange={mapState.timeRange}
-        isTimeScroll={mapState.isTimeScroll}
-        onTimeChange={handleTimeChange}
-        onToggleTimeScroll={handleToggleTimeScroll}
-      />
+    <main ref={mainRef} className="relative h-screen w-screen overscroll-none">
+      <WTGoogleMap mapState={mapState} setMapState={setMapState} />
+      <YearRangeSelector mapState={mapState} setMapState={setMapState} />
     </main>
   );
 }

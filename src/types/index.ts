@@ -4,14 +4,13 @@ export interface TimeRange {
 }
 
 export interface ViewState {
-  center: [number, number];
+  center: { lat: number, lng: number };
   zoom: number;
 }
 
 export interface MapState {
-  timeRange: TimeRange;
+  year: TimeRange;
   view: ViewState;
-  isTimeScroll: boolean;
 }
 
 export interface MapPeriod {
