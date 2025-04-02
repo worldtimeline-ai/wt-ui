@@ -1,5 +1,5 @@
 import { GoogleMap, LoadScript, Marker, InfoWindow } from "@react-google-maps/api";
-import { AwaitedReactNode, JSXElementConstructor, ReactElement, ReactNode, ReactPortal, useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { MapState } from "../types";
 
 const containerStyle = { width: "100vw", height: "100vh" };

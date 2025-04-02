@@ -24,14 +24,13 @@ export default function Home() {
   useEffect(() => {
     if (!isLoading) {
       setIsLoading(true);
+      setEvents([]);
       getEvents(mapState).then(data => {
         setEvents(data.events);
         setIsLoading(false);
       });
     }
   }, [mapState]);
-
-  console.log('events', events);
 
   useEffect(() => {
     const handleTouchMove = (event: TouchEvent) => {
