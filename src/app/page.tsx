@@ -9,6 +9,7 @@ import { getEvents } from "../lib/api/event.service";
 export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
   const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [mapState, setMapState] = useState<MapState>({
     year: {
       start: 2015,
@@ -21,9 +22,13 @@ export default function Home() {
   });
 
   useEffect(() => {
-    getEvents(mapState).then(data => {
-      setEvents(data.events);
-    })
+    if (!isLoading) {
+      setIsLoading(true);
+      getEvents(mapState).then(data => {
+        setEvents(data.events);
+        setIsLoading(false);
+      });
+    }
   }, [mapState]);
 
   console.log('events', events);
