@@ -4,9 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import type { MapState } from "@/src/types";
 import YearRangeSelector from "../components/YearRangeSelector";
 import WTGoogleMap from "../components/WTGoogleMap";
+import { getEvents } from "../lib/api/event.service";
 
 export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
+  const [events, setEvents] = useState([]);
   const [mapState, setMapState] = useState<MapState>({
     year: {
       start: 2015,
@@ -18,7 +20,13 @@ export default function Home() {
     }
   });
 
-  console.log(mapState);
+  useEffect(() => {
+    getEvents(mapState).then(data => {
+      setEvents(data.events);
+    })
+  }, [mapState]);
+
+  console.log('events', events);
 
   useEffect(() => {
     const handleTouchMove = (event: TouchEvent) => {
@@ -36,7 +44,7 @@ export default function Home() {
 
   return (
     <main ref={mainRef} className="relative h-screen w-screen overscroll-none">
-      <WTGoogleMap mapState={mapState} setMapState={setMapState} />
+      <WTGoogleMap mapState={mapState} setMapState={setMapState} events={events} />
       <YearRangeSelector mapState={mapState} setMapState={setMapState} />
     </main>
   );
