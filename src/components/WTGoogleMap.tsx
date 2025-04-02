@@ -93,8 +93,8 @@ export default function WTGoogleMap(props: any) {
                                         </div>
                                         <div className="flex gap-1">
                                             <div className="py-1 px-2 rounded-full bg-gray-300">{marker.year}</div>
-                                            {marker.tags.map((tag: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined) => (
-                                                <div className="py-1 px-2 rounded-full bg-gray-300">{tag}</div>
+                                            {marker.tags.map((tag: string) => (
+                                                <div key={tag} className="py-1 px-2 rounded-full bg-gray-300">{tag}</div>
                                             ))}
                                         </div>
                                     </div>
