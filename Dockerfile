@@ -5,8 +5,6 @@ RUN npm install --force
 COPY . .
 RUN npm run build
 
-FROM nginx:latest
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
-COPY --from=builder /usr/src/app/out .
+FROM nginx:1.23-alpine
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /usr/src/app/out /usr/share/nginx/html
