@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - production
+      - main
 name: Prod - Build & Deploy
 env:
   LOCATION: centralindia
