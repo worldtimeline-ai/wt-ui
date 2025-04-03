@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import TopLoadingBar from "./TopLoadingBar";
 
 const YearRangeSelector = (props: any) => {
-    const { mapState, setMapState } = props;
+    const { isLoading, mapState, setMapState } = props;
     const CURRENT_YEAR = 2025;
     const EARLIEST_YEAR = -3000;
     const DEFAULT_START_YEAR = mapState.year.start;
@@ -10,11 +11,11 @@ const YearRangeSelector = (props: any) => {
     const [selectedRange, setSelectedRange] = useState({ start: DEFAULT_START_YEAR, end: DEFAULT_END_YEAR });
     const [viewWindow, setViewWindow] = useState({ start: DEFAULT_START_YEAR - 45, end: DEFAULT_END_YEAR });
     const [isDragging, setIsDragging] = useState(false);
-    const [dragStart, setDragStart] = useState(null);
+    const [dragStart, setDragStart] = useState(0);
     const [wasDragging, setWasDragging] = useState(false);
     const [activeDragHandle, setActiveDragHandle] = useState(null);
 
-    const timelineRef = useRef(null);
+    const timelineRef = useRef<any>(null);
 
     useEffect(() => {
         setMapState({
@@ -45,7 +46,7 @@ const YearRangeSelector = (props: any) => {
         if (isDragging || wasDragging) return;
 
         // Calculate the year based on click position
-        const timelineRect = timelineRef.current.getBoundingClientRect();
+        const timelineRect = timelineRef.current?.getBoundingClientRect();
         const relativeX = e.clientX - timelineRect.left;
         const clickedYear = positionToYear(relativeX);
 
@@ -60,16 +61,16 @@ const YearRangeSelector = (props: any) => {
     };
 
     // Handle scroll to change visible range
-    const handleScroll = (e: WheelEvent) => {
+    const handleScroll = (e: any) => {
         e.stopPropagation();
 
         const scrollAmount = e.deltaX * 0.5; // Adjust sensitivity
-        let animationFrameId: number;
+        let animationFrameId: number = 0;
 
         const updateViewWindow = () => {
             setViewWindow((prev) => {
                 const range = prev.end - prev.start;
-                let newStart = Math.max(EARLIEST_YEAR, prev.start - scrollAmount);
+                let newStart = Math.max(EARLIEST_YEAR, prev.start + scrollAmount);
                 let newEnd = Math.min(CURRENT_YEAR, newStart + range);
 
                 // Adjust if we hit the upper bound
@@ -94,7 +95,7 @@ const YearRangeSelector = (props: any) => {
     };
 
     // Convert pixel position to year
-    const positionToYear = (position: number | null) => {
+    const positionToYear = (position: number) => {
         const timelineWidth = timelineRef.current ? timelineRef.current.offsetWidth : 1000;
         const viewRange = viewWindow.end - viewWindow.start;
         return Math.round(viewWindow.start + (position / timelineWidth) * viewRange);
@@ -146,7 +147,7 @@ const YearRangeSelector = (props: any) => {
         setDragStart(e.clientX);
     };
 
-    const handleMouseUp = (e) => {
+    const handleMouseUp = (e: any) => {
         e.stopPropagation();
         setIsDragging(false);
         setActiveDragHandle(null);
@@ -201,17 +202,17 @@ const YearRangeSelector = (props: any) => {
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto pt-4">
-            <div className="flex items-center mb-4 relative">
+        <div className="w-full flex flex-col gap-0 max-w-4xl mx-auto pt-4">
+            <div className="flex items-center relative gap-1">
                 <button
-                    className="bg-blue-500 text-white rounded-lg h-8 px-1 flex items-center justify-center"
+                    className="bg-blue-500 text-white rounded-lg h-8 w-10 flex items-center justify-center"
                     onClick={() => adjustViewWindow('start', 10)}
                 >
                     -10
                 </button>
 
                 <div
-                    className="w-full h-8 bg-gray-100 rounded-lg relative mx-2 overflow-hidden cursor-pointer"
+                    className={`w-full h-8 bg-gray-100 rounded-lg relative mx-2 overflow-hidden cursor-pointer ${isLoading ? 'rounded-b-none' : ''}`}
                     onWheel={handleScroll}
                     onClick={handleTimelineClick}
                     ref={timelineRef}
@@ -253,11 +254,14 @@ const YearRangeSelector = (props: any) => {
                 </div>
 
                 <button
-                    className="bg-blue-500 text-white rounded-lg h-8 px-1 flex items-center justify-center"
+                    className="bg-blue-500 text-white rounded-lg h-8 w-10 flex items-center justify-center"
                     onClick={() => adjustViewWindow('end', 10)}
                 >
                     +10
                 </button>
+            </div>
+            <div className='mx-12 relative flex items-center'>
+                <TopLoadingBar isLoading={isLoading} />
             </div>
         </div>
     );

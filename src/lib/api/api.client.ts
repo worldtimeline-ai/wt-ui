@@ -34,13 +34,13 @@ apiClient.interceptors.response.use(
     error => {
         console.error(error)
         if (error?.response?.status === 401) {
-            window.location = "/logout";
+            // window.location = "/logout";
         }
         throw error;
     },
 );
 
-const refreshAuthLogic = async (failedRequest) => {
+const refreshAuthLogic = async (failedRequest: any) => {
     try {
         const refresh_token = localStorage.getItem(KEYS.REFRESH_TOKEN) || '';
         const response = await axios.post(`${process.env.NEXT_PUBLIC_WT_API_BASE_URL}/api/v1/auth/renew-token`, {
@@ -52,7 +52,7 @@ const refreshAuthLogic = async (failedRequest) => {
         failedRequest.response.config.headers.Authorization = `${accessToken}`;
         return Promise.resolve();
     } catch (err) {
-        window.location = "/logout";
+        // window.location = "/logout";
     }
 };
 

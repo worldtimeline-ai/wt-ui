@@ -35,6 +35,9 @@ export default function WTGoogleMap(props: any) {
     const handleCenterChanged = useCallback(() => {
         if (!mapRef.current) return;
         const newPos = mapRef.current.getCenter()?.toJSON();
+        if (!newPos || (mapState.view.center.lat.toFixed(2) === newPos.lat.toFixed(2) && mapState.view.center.lng.toFixed(2) === newPos.lng.toFixed(2))) {
+            return;
+        }
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
@@ -47,11 +50,14 @@ export default function WTGoogleMap(props: any) {
                 },
             }));
         }, 500);
-    }, []);
+    }, [mapState]);
 
     const handleZoomChanged = useCallback(() => {
         if (!mapRef.current) return;
         const newZoom = mapRef.current.getZoom();
+        if (mapState.view.zoom === newZoom) {
+            return;
+        }
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
@@ -64,7 +70,7 @@ export default function WTGoogleMap(props: any) {
                 },
             }));
         }, 500);
-    }, []);
+    }, [mapState]);
 
     return (
         <div className="absolute inset-0 p-0 overscroll-none">
@@ -83,11 +89,13 @@ export default function WTGoogleMap(props: any) {
                         <Marker
                             key={marker.id}
                             position={marker.position}
-                            onMouseOver={() => setHoveredMarker(marker.id)}
-                            onMouseOut={() => setHoveredMarker(null)}>
+                            onMouseOver={() => setHoveredMarker(marker.id)}>
                             {hoveredMarker === marker.id && (
-                                <InfoWindow position={marker.position} onCloseClick={() => setHoveredMarker(null)}>
-                                    <div className="flex flex-col gap-1">
+                                <InfoWindow
+                                    options={{ maxWidth: 350 }}
+                                    position={marker.position}
+                                    onCloseClick={() => setHoveredMarker(null)}>
+                                    <div className="flex flex-col gap-2">
                                         <div>
                                             {marker.description || marker.name}
                                         </div>

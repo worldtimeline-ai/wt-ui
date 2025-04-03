@@ -24,7 +24,6 @@ export default function Home() {
   useEffect(() => {
     if (!isLoading) {
       setIsLoading(true);
-      setEvents([]);
       getEvents(mapState).then(data => {
         setEvents(data.events);
         setIsLoading(false);
@@ -49,7 +48,7 @@ export default function Home() {
   return (
     <main ref={mainRef} className="relative h-screen w-screen overscroll-none">
       <WTGoogleMap mapState={mapState} setMapState={setMapState} events={events} />
-      <YearRangeSelector mapState={mapState} setMapState={setMapState} />
+      <YearRangeSelector isLoading={isLoading} mapState={mapState} setMapState={setMapState} />
     </main>
   );
 }
