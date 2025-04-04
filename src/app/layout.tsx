@@ -5,8 +5,24 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Historical World Map",
-  description: "Interactive visualization of historical world maps across different time periods",
+  title: "World Timeline",
+  description: "Interactive visualization of world timeline across different time periods",
+  generator: 'Next.js',
+  manifest: '/manifest.json',
+  keywords: ['nextjs', 'nextjs14', 'next14', 'pwa', 'next-pwa'],
+  themeColor: [{ media: '(prefers-color-scheme: dark)', color: '#fff' }],
+  authors: [
+    { name: 'Vikash Kumar' },
+    {
+      name: 'Vikash Kumar',
+      url: 'https://www.linkedin.com/in/sharma-vikashkr/',
+    },
+  ],
+  viewport: 'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover',
+  icons: [
+    { rel: 'apple-touch-icon', url: 'icons/icon.png' },
+    { rel: 'icon', url: 'icons/icon.png' },
+  ],
 };
 
 export default function RootLayout({

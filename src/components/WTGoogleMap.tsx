@@ -32,10 +32,16 @@ export default function WTGoogleMap(props: any) {
         mapRef.current = map;
     }
 
-    const handleCenterChanged = useCallback(() => {
+    const onMapIdle = useCallback(() => {
         if (!mapRef.current) return;
         const newPos = mapRef.current.getCenter()?.toJSON();
-        if (!newPos || (mapState.view.center.lat.toFixed(2) === newPos.lat.toFixed(2) && mapState.view.center.lng.toFixed(2) === newPos.lng.toFixed(2))) {
+        const newZoom = mapRef.current.getZoom();
+        if (hoveredMarker || !newPos || !newZoom ||
+            (
+                mapState.view.center.lat.toFixed(2) === newPos.lat.toFixed(2) &&
+                mapState.view.center.lng.toFixed(2) === newPos.lng.toFixed(2) &&
+                mapState.view.zoom === newZoom
+            )) {
             return;
         }
         if (timeoutRef.current) {
@@ -47,43 +53,36 @@ export default function WTGoogleMap(props: any) {
                 view: {
                     ...prevState.view,
                     center: newPos,
-                },
-            }));
-        }, 500);
-    }, [mapState]);
-
-    const handleZoomChanged = useCallback(() => {
-        if (!mapRef.current) return;
-        const newZoom = mapRef.current.getZoom();
-        if (mapState.view.zoom === newZoom) {
-            return;
-        }
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-        }
-        timeoutRef.current = setTimeout(() => {
-            setMapState((prevState: MapState) => ({
-                ...prevState,
-                view: {
-                    ...prevState.view,
                     zoom: newZoom,
                 },
             }));
         }, 500);
-    }, [mapState]);
+    }, [mapState, hoveredMarker]);
+
+    const onMapChanged = useCallback(() => {
+        if (!mapRef.current) return;
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+            setHoveredMarker(null);
+        }, 500);
+    }, []);
 
     return (
         <div className="absolute inset-0 p-0 overscroll-none">
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? ''}>
                 <GoogleMap
                     key={123}
+                    mapTypeId="terrain"
                     options={options}
                     onLoad={handleLoad}
                     mapContainerStyle={containerStyle}
                     center={mapState.view.center}
                     zoom={mapState.view.zoom}
-                    onCenterChanged={handleCenterChanged}
-                    onZoomChanged={handleZoomChanged}
+                    onIdle={onMapIdle}
+                    onDragStart={onMapChanged}
+                    onZoomChanged={onMapChanged}
                 >
                     {markers.map((marker: any) => (
                         <Marker
