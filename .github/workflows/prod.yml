@@ -7,7 +7,7 @@ env:
   LOCATION: centralindia
   RESOURCE_GROUP: WorldTimelineARG
   CONTAINER_REGISTERY: worldtimelineacr
-  APP_NAME: wt-ui
+  APP_NAME: world-timeline-ui
   WEBAPP_NAME: worldtimelineui
 jobs:
     build-and-deploy:
