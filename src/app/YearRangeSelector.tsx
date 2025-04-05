@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import TopLoadingBar from "./TopLoadingBar";
+import TopLoadingBar from "../components/TopLoadingBar";
 
 const YearRangeSelector = (props: any) => {
     const { isLoading, mapState, setMapState } = props;

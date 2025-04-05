@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useRef, useEffect, AwaitedReactNode, JSXElementConstructor, ReactElement, ReactNode, ReactPortal } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { MapState } from "@/src/types";
-import YearRangeSelector from "../components/YearRangeSelector";
-import WTGoogleMap from "../components/WTGoogleMap";
+import YearRangeSelector from "./YearRangeSelector";
+import WTGoogleMap from "./WTGoogleMap";
 import { getEvents } from "../lib/api/event.service";
+import SidePanel from "./SidePanel";
 
 export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
   const [events, setEvents] = useState<any>([]);
+  const [tags, setTags] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [mapState, setMapState] = useState<MapState>({
     year: {
@@ -48,26 +50,7 @@ export default function Home() {
   return (
     <main ref={mainRef} className="relative h-screen w-screen overscroll-none">
       <WTGoogleMap mapState={mapState} setMapState={setMapState} events={events} />
-      <div tabIndex={0} className="collapse fixed left-10 top-20 w-1/4">
-        <div className="cursor-pointer text-xs pl-[1rem]">
-          <div className="bg-blue-500 text-white rounded-lg p-2 w-14 flex items-center justify-center">Events</div>
-        </div>
-        <div className="collapse-content">
-          <div className="h-96 overflow-y-auto flex flex-col gap-1 bg-white rounded-lg">
-            {events.map((ev: any) => (
-              <div className="border-b-1 p-4 cursor-pointer">
-                <p className="text-[12px]">{ev.description}</p>
-                <div className="flex gap-1">
-                  <div className="text-[8px] py-1 px-2 rounded-full bg-gray-300">{ev.year}</div>
-                  {ev.tags.map((tag: string) => (
-                    <div key={tag} className="text-[8px] py-1 px-2 rounded-full bg-gray-300">{tag}</div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <SidePanel events={events} tags={tags} setTags={setTags} />
       <YearRangeSelector isLoading={isLoading} mapState={mapState} setMapState={setMapState} />
     </main>
   );
