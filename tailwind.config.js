@@ -147,6 +147,22 @@ const config = {
       }),
     },
   },
+  plugins: [
+    require('daisyui'),
+  ],
+  daisyui: {
+    themes: [{
+      dftheme: {
+        "primary": "#0A5687",
+        "secondary": "#293153",
+        "accent": "#37cdbe",
+        "neutral": "#3d4451",
+        "base-100": "#ffffff",
+        "error": "#AB2222",
+        "stroke": '#333333'
+      },
+    },],
+  },
   darkMode: 'class',
 };
 export default config;
