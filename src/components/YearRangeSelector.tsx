@@ -205,7 +205,7 @@ const YearRangeSelector = (props: any) => {
         <div className="w-full flex flex-col gap-0 max-w-4xl mx-auto pt-4">
             <div className="flex items-center relative gap-1">
                 <button
-                    className="bg-blue-500 text-white rounded-lg h-8 w-10 flex items-center justify-center"
+                    className="bg-blue-500 text-white rounded-lg text-xs h-8 w-10 flex items-center justify-center"
                     onClick={() => adjustViewWindow('start', 10)}
                 >
                     -10
@@ -254,7 +254,7 @@ const YearRangeSelector = (props: any) => {
                 </div>
 
                 <button
-                    className="bg-blue-500 text-white rounded-lg h-8 w-10 flex items-center justify-center"
+                    className="bg-blue-500 text-white rounded-lg text-xs h-8 w-10 flex items-center justify-center"
                     onClick={() => adjustViewWindow('end', 10)}
                 >
                     +10

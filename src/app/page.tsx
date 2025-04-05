@@ -49,10 +49,10 @@ export default function Home() {
     <main ref={mainRef} className="relative h-screen w-screen overscroll-none">
       <WTGoogleMap mapState={mapState} setMapState={setMapState} events={events} />
       <div tabIndex={0} className="collapse fixed left-10 top-20 w-1/4">
-        <div className="text-blue-500 underline cursor-pointer text-xs pl-[1rem]">
+        <div className="cursor-pointer text-xs pl-[1rem]">
           <div className="bg-blue-500 text-white rounded-lg p-2 w-14 flex items-center justify-center">Events</div>
         </div>
-        <div className="collapse-content text-black">
+        <div className="collapse-content">
           <div className="h-96 overflow-y-auto flex flex-col gap-1 bg-white rounded-lg">
             {events.map((ev: any) => (
               <div className="border-b-1 p-4 cursor-pointer">
