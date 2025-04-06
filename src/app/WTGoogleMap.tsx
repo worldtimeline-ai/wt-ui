@@ -13,20 +13,22 @@ const options = {
 
 export default function WTGoogleMap(props: any) {
     const mapRef = useRef<google.maps.Map>();
-    const { mapState, setMapState, events } = props;
+    const { mapState, setMapState, events, tags } = props;
     const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const markers = useMemo(() => {
-        return events.map((e: any, i: any) => ({
-            ...e,
-            id: i,
-            position: {
-                lat: e.location?.latitude,
-                lng: e.location?.longitude,
-            },
-        }));
-    }, [events]);
+        return events
+            .filter((ev: any) => ev.tags?.some((et: any) => tags.find((t: any) => t.name == et)?.selected))
+            .map((e: any, i: any) => ({
+                ...e,
+                id: i,
+                position: {
+                    lat: e.location?.latitude,
+                    lng: e.location?.longitude,
+                },
+            }));
+    }, [events, tags]);
 
     function handleLoad(map: google.maps.Map) {
         mapRef.current = map;
@@ -87,6 +89,11 @@ export default function WTGoogleMap(props: any) {
                     {markers.map((marker: any) => (
                         <Marker
                             key={marker.id}
+                            icon={{
+                                url: '/icons/icon.png',
+                                scaledSize: new window.google.maps.Size(30, 30),
+                                anchor: new window.google.maps.Point(20, 40),
+                            }}
                             position={marker.position}
                             onMouseOver={() => setHoveredMarker(marker.id)}>
                             {hoveredMarker === marker.id && (
@@ -96,7 +103,7 @@ export default function WTGoogleMap(props: any) {
                                     onCloseClick={() => setHoveredMarker(null)}>
                                     <div className="flex flex-col gap-1 py-2">
                                         <div>
-                                            {marker.description || marker.name}
+                                            {marker.description}
                                         </div>
                                         <div className="flex gap-1">
                                             <div className="py-1 px-2 rounded-full bg-gray-300">{marker.year}</div>

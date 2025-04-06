@@ -18,10 +18,32 @@ export default function Home() {
       end: 2025
     },
     view: {
-      center: { lat: 28.6139, lng: 77.2090 },
+      center: { lat: 51.5072, lng: 0.1276 },
       zoom: 7
     }
   });
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setMapState((prevState: MapState) => ({
+          ...prevState,
+          view: {
+            ...prevState.view,
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+          },
+        }));
+      },
+      (err) => {}
+    );
+  }, []);
 
   useEffect(() => {
     if (!isLoading) {
@@ -49,7 +71,7 @@ export default function Home() {
 
   return (
     <main ref={mainRef} className="relative h-screen w-screen overscroll-none">
-      <WTGoogleMap mapState={mapState} setMapState={setMapState} events={events} />
+      <WTGoogleMap mapState={mapState} setMapState={setMapState} events={events} tags={tags} />
       <SidePanel events={events} tags={tags} setTags={setTags} />
       <YearRangeSelector isLoading={isLoading} mapState={mapState} setMapState={setMapState} />
     </main>

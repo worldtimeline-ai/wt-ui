@@ -7,7 +7,7 @@ const SidePanel = (props: any) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setTags([...(new Set(...events?.map((ev: any) => ev.tags)))].map((t) => ({ name: t, selected: true })));
+        setTags([...(new Set(events.flatMap((ev: any) => ev.tags)))].map((t) => ({ name: t, selected: true })));
     }, [events]);
 
     useEffect(() => {
@@ -40,17 +40,19 @@ const SidePanel = (props: any) => {
                 </div>
                 <div className="collapse-content">
                     <div className="max-h-96 overflow-y-auto flex flex-col gap-1 bg-white rounded-lg">
-                        {events.map((ev: any) => (
-                            <div className="border-b-1 p-4 cursor-pointer">
-                                <p className="text-[12px]">{ev.description}</p>
-                                <div className="flex gap-1">
-                                    <div className="text-[8px] py-1 px-2 rounded-full bg-gray-300">{ev.year}</div>
-                                    {ev.tags.map((tag: string) => (
-                                        <div key={tag} className="text-[8px] py-1 px-2 rounded-full bg-gray-300">{tag}</div>
-                                    ))}
+                        {events
+                            .filter((ev: any) => ev.tags?.some((et: any) => tags.find((t: any) => t.name == et)?.selected))
+                            .map((ev: any) => (
+                                <div className="border-b-1 p-4 cursor-pointer">
+                                    <p className="text-[12px]">{ev.description}</p>
+                                    <div className="flex gap-1">
+                                        <div className="text-[8px] py-1 px-2 rounded-full bg-gray-300">{ev.year}</div>
+                                        {ev.tags.map((tag: string) => (
+                                            <div key={`ev-${tag}`} className="text-[8px] py-1 px-2 rounded-full bg-gray-300">{tag}</div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
                     </div>
                 </div>
             </div>
@@ -60,8 +62,8 @@ const SidePanel = (props: any) => {
                 </div>
                 <div className="collapse-content">
                     <div className="max-h-96 overflow-y-auto flex flex-col gap-1 bg-white rounded-lg">
-                        {[...tags].map((tag: any) => (
-                            <div key={tag} className="border-b-1 p-4">
+                        {tags.map((tag: any) => (
+                            <div key={`${tag.name}`} className="border-b-1 p-4">
                                 <WTCheckbox label={tag.name} defaultChecked={tag.selected} onChange={(checked: boolean) => handleTagChecked(tag.name, checked)} />
                             </div>
                         ))}
