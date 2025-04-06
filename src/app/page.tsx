@@ -50,6 +50,7 @@ export default function Home() {
       setIsLoading(true);
       getEvents(mapState).then(data => {
         setEvents(data.events);
+        setTags([...(new Set(data.events.flatMap((ev: any) => ev.tags)))].map((t) => ({ name: t, selected: true })));
         setIsLoading(false);
       });
     }
@@ -72,7 +73,7 @@ export default function Home() {
   return (
     <main ref={mainRef} className="relative h-screen w-screen overscroll-none">
       <WTGoogleMap mapState={mapState} setMapState={setMapState} events={events} tags={tags} />
-      <SidePanel events={events} tags={tags} setTags={setTags} />
+      <SidePanel events={events} setEvents={setEvents} tags={tags} setTags={setTags} />
       <YearRangeSelector isLoading={isLoading} mapState={mapState} setMapState={setMapState} />
     </main>
   );

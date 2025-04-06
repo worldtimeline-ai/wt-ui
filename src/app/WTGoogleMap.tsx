@@ -91,7 +91,7 @@ export default function WTGoogleMap(props: any) {
                             key={marker.id}
                             icon={{
                                 url: '/icons/icon.png',
-                                scaledSize: new window.google.maps.Size(30, 30),
+                                scaledSize: new window.google.maps.Size(marker.hovered ? 40 : 30, marker.hovered ? 40 : 30),
                                 anchor: new window.google.maps.Point(20, 40),
                             }}
                             position={marker.position}

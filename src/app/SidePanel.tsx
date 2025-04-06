@@ -1,14 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import WTCheckbox from "../components/Checkbox";
 
 const SidePanel = (props: any) => {
-    const { events, tags, setTags } = props;
+    const { events, setEvents, tags, setTags } = props;
     const [isOpen, setIsOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        setTags([...(new Set(events.flatMap((ev: any) => ev.tags)))].map((t) => ({ name: t, selected: true })));
-    }, [events]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -32,6 +28,18 @@ const SidePanel = (props: any) => {
         setTags(updatedTags);
     }
 
+    const handleHover = useCallback((event: any) => {
+        const newEvents = [...events];
+        newEvents.find((ev:any) => ev.description === event.description).hovered = true;
+        setEvents(newEvents);
+    }, [events]);
+
+    const handleLeave = useCallback((event: any) => {
+        const newEvents = [...events];
+        newEvents.find((ev: any) => ev.description === event.description).hovered = false;
+        setEvents(newEvents);
+    }, [events]);
+
     return (
         <div className="flex flex-col gap-2 fixed left-10 top-20 w-1/4">
             <div tabIndex={0} className="collapse">
@@ -43,7 +51,10 @@ const SidePanel = (props: any) => {
                         {events
                             .filter((ev: any) => ev.tags?.some((et: any) => tags.find((t: any) => t.name == et)?.selected))
                             .map((ev: any) => (
-                                <div className="border-b-1 p-4 cursor-pointer">
+                                <div
+                                    className="border-b-1 p-4 cursor-pointer"
+                                    onMouseEnter={() => handleHover(ev)}
+                                    onMouseLeave={() => handleLeave(ev)}>
                                     <p className="text-[12px]">{ev.description}</p>
                                     <div className="flex gap-1">
                                         <div className="text-[8px] py-1 px-2 rounded-full bg-gray-300">{ev.year}</div>
