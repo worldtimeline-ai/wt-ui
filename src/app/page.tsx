@@ -11,6 +11,7 @@ export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
   const [events, setEvents] = useState<any>([]);
   const [tags, setTags] = useState<any[]>([]);
+  const [startingUp, setStartingUp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [mapState, setMapState] = useState<MapState>({
     year: {
@@ -25,9 +26,9 @@ export default function Home() {
 
   useEffect(() => {
     if (!navigator.geolocation) {
+      setStartingUp(false);
       return;
     }
-
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setMapState((prevState: MapState) => ({
@@ -40,13 +41,16 @@ export default function Home() {
             },
           },
         }));
+        setStartingUp(false);
       },
-      (err) => {}
+      (err) => {
+        setStartingUp(false);
+      }
     );
   }, []);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && !startingUp) {
       setIsLoading(true);
       getEvents(mapState).then(data => {
         setEvents(data.events);
@@ -54,7 +58,7 @@ export default function Home() {
         setIsLoading(false);
       });
     }
-  }, [mapState]);
+  }, [mapState, startingUp]);
 
   useEffect(() => {
     const handleTouchMove = (event: TouchEvent) => {
