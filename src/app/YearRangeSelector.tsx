@@ -208,7 +208,7 @@ const YearRangeSelector = (props: any) => {
                     className="bg-blue-500 text-white rounded-lg text-xs h-8 w-10 flex items-center justify-center"
                     onClick={() => adjustViewWindow('start', 10)}
                 >
-                    -10
+                    +10
                 </button>
 
                 <div
