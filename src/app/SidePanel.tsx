@@ -2,18 +2,30 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import WTCheckbox from "../components/Checkbox";
 import Switch from '../components/Switch';
 
+const initialCollapseState = {
+    events: true,
+    tags: true,
+}
+
 const SidePanel = (props: any) => {
     const { events, setEvents, tags, setTags, startingUp, setStartingUp } = props;
-    const [isOpen, setIsOpen] = useState(false);
-    const wrapperRef = useRef<HTMLDivElement>(null);
+    const [collapseState, setCollapseState] = useState(initialCollapseState);
+    const eventsWrapperRef = useRef<HTMLDivElement>(null);
+    const tagsWrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
-                wrapperRef.current &&
-                !wrapperRef.current.contains(event.target as Node)
+                eventsWrapperRef.current &&
+                !eventsWrapperRef.current.contains(event.target as Node)
             ) {
-                setIsOpen(false);
+                setCollapseState((prev) => ({ ...prev, events: true }));
+            }
+            if (
+                tagsWrapperRef.current &&
+                !tagsWrapperRef.current.contains(event.target as Node)
+            ) {
+                setCollapseState((prev) => ({ ...prev, tags: true }));
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -31,7 +43,7 @@ const SidePanel = (props: any) => {
 
     const handleHover = useCallback((event: any) => {
         const newEvents = [...events];
-        newEvents.find((ev:any) => ev.description === event.description).hovered = true;
+        newEvents.find((ev: any) => ev.description === event.description).hovered = true;
         setEvents(newEvents);
     }, [events]);
 
@@ -42,12 +54,13 @@ const SidePanel = (props: any) => {
     }, [events]);
 
     return (
-        <div className="flex flex-col gap-4 fixed left-10 top-20 w-1/4 bg-secondary/50 p-2 rounded-lg">
+        <div className="flex flex-col gap-4 fixed left-10 top-20 w-1/4 bg-gray-700/70 p-2 rounded-lg">
+            <h3 className="text-white text-center">Control Panel</h3>
             <div>
                 <Switch label='Freeze Updates' defaultChecked={startingUp} onChange={setStartingUp} />
             </div>
-            <div tabIndex={0} className="collapse">
-                <div className="cursor-pointer text-xs">
+            <div ref={eventsWrapperRef} className={`collapse ${!collapseState.events ? 'collapse-open' : 'collapse-close'} `}>
+                <div className="cursor-pointer text-xs" onClick={() => setCollapseState((prev) => ({ ...prev, events: false }))}>
                     <div className="bg-blue-500 text-white rounded-lg p-2 w-14 flex items-center justify-center">Events</div>
                 </div>
                 <div className="collapse-content">
@@ -71,8 +84,8 @@ const SidePanel = (props: any) => {
                     </div>
                 </div>
             </div>
-            <div ref={wrapperRef} className={`collapse ${isOpen ? 'collapse-open' : 'collapse-close'} `}>
-                <div className="cursor-pointer text-xs" onClick={() => setIsOpen((prev) => !prev)}>
+            <div ref={tagsWrapperRef} className={`collapse ${!collapseState.tags ? 'collapse-open' : 'collapse-close'} `}>
+                <div className="cursor-pointer text-xs" onClick={() => setCollapseState((prev) => ({ ...prev, tags: false }))}>
                     <div className="bg-blue-500 text-white rounded-lg p-2 w-14 flex items-center justify-center">Tags</div>
                 </div>
                 <div className="collapse-content">
@@ -85,7 +98,7 @@ const SidePanel = (props: any) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
