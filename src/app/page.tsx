@@ -77,8 +77,8 @@ export default function Home() {
   return (
     <main ref={mainRef} className="relative h-screen w-screen overscroll-none">
       <WTGoogleMap mapState={mapState} setMapState={setMapState} events={events} tags={tags} />
-      <SidePanel events={events} setEvents={setEvents} tags={tags} setTags={setTags} />
       <YearRangeSelector isLoading={isLoading} mapState={mapState} setMapState={setMapState} />
+      <SidePanel events={events} setEvents={setEvents} tags={tags} setTags={setTags} startingUp={startingUp} setStartingUp={setStartingUp} />
     </main>
   );
 }

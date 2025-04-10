@@ -11,7 +11,7 @@ const config = {
         current: 'currentColor',
         black: '#222222',
         white: '#FFFFFF',
-        primary: '#0060A0',
+        primary: '#0b5403',
         secondary: '#293153',
         stroke: '#333333',
         themePrimary: 'var(--primary-color)',
@@ -153,7 +153,7 @@ const config = {
   daisyui: {
     themes: [{
       dftheme: {
-        "primary": "#0A5687",
+        "primary": "#0b5403",
         "secondary": "#293153",
         "accent": "#37cdbe",
         "neutral": "#3d4451",

@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import WTCheckbox from "../components/Checkbox";
+import Switch from '../components/Switch';
 
 const SidePanel = (props: any) => {
-    const { events, setEvents, tags, setTags } = props;
+    const { events, setEvents, tags, setTags, startingUp, setStartingUp } = props;
     const [isOpen, setIsOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -41,13 +42,16 @@ const SidePanel = (props: any) => {
     }, [events]);
 
     return (
-        <div className="flex flex-col gap-2 fixed left-10 top-20 w-1/4">
+        <div className="flex flex-col gap-4 fixed left-10 top-20 w-1/4 bg-secondary/50 p-2 rounded-lg">
+            <div>
+                <Switch label='Freeze Updates' defaultChecked={startingUp} onChange={setStartingUp} />
+            </div>
             <div tabIndex={0} className="collapse">
-                <div className="cursor-pointer text-xs pl-[1rem]">
+                <div className="cursor-pointer text-xs">
                     <div className="bg-blue-500 text-white rounded-lg p-2 w-14 flex items-center justify-center">Events</div>
                 </div>
                 <div className="collapse-content">
-                    <div className="max-h-96 overflow-y-auto flex flex-col gap-1 bg-white rounded-lg">
+                    <div className="max-h-96 overflow-y-auto flex flex-col gap-1 bg-white/50 hover:bg-white/70 rounded-lg">
                         {events
                             .filter((ev: any) => ev.tags?.some((et: any) => tags.find((t: any) => t.name == et)?.selected))
                             .map((ev: any) => (
@@ -68,11 +72,11 @@ const SidePanel = (props: any) => {
                 </div>
             </div>
             <div ref={wrapperRef} className={`collapse ${isOpen ? 'collapse-open' : 'collapse-close'} `}>
-                <div className="cursor-pointer text-xs pl-[1rem]" onClick={() => setIsOpen((prev) => !prev)}>
+                <div className="cursor-pointer text-xs" onClick={() => setIsOpen((prev) => !prev)}>
                     <div className="bg-blue-500 text-white rounded-lg p-2 w-14 flex items-center justify-center">Tags</div>
                 </div>
                 <div className="collapse-content">
-                    <div className="max-h-96 overflow-y-auto flex flex-col gap-1 bg-white rounded-lg">
+                    <div className="max-h-96 overflow-y-auto flex flex-col gap-1 bg-white/50 hover:bg-white/70 rounded-lg">
                         {tags.map((tag: any) => (
                             <div key={`${tag.name}`} className="border-b-1 p-4">
                                 <WTCheckbox label={tag.name} defaultChecked={tag.selected} onChange={(checked: boolean) => handleTagChecked(tag.name, checked)} />
