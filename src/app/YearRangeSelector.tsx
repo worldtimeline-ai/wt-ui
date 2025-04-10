@@ -246,12 +246,23 @@ const YearRangeSelector = (props: any) => {
                     />
 
                     {/* End handle */}
-                    <div
-                        className="absolute top-0 h-10 w-1 bg-blue-600 cursor-ew-resize"
-                        style={{ left: `${yearToPosition(selectedRange.end) - 2}px` }}
-                        onMouseDown={(e) => handleMouseDown(e, 'end')}
-                    />
+                    <div className='flex flex-col'>
+                        <div
+                            className="absolute top-0 h-10 w-1 bg-blue-600 cursor-ew-resize"
+                            style={{ left: `${yearToPosition(selectedRange.end) - 2}px` }}
+                            onMouseDown={(e) => handleMouseDown(e, 'end')}
+                        />
+                    </div>
                 </div>
+
+                <div
+                    className="absolute top-0 bg-white/50 rounded-lg px-1 text-[8px]"
+                    style={{ left: `${yearToPosition(selectedRange.start) + 30}px`, top: '35px' }}
+                >{mapState.year.start <= 0 ? `${Math.abs(mapState.year.start)} BCE` : `${mapState.year.start} CE`}</div>
+                <div
+                    className="absolute top-0 bg-white/50 rounded-lg px-1 text-[8px]"
+                    style={{ left: `${yearToPosition(selectedRange.end) + 30}px`, top: '35px' }}
+                >{mapState.year.end <= 0 ? `${Math.abs(mapState.year.end)} BCE` : `${mapState.year.end} CE`}</div>
 
                 <button
                     className="bg-blue-500 text-white rounded-lg text-xs h-8 w-10 flex items-center justify-center"
