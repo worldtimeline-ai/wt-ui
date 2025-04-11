@@ -1,4 +1,4 @@
-import { GoogleMap, LoadScript, Marker, InfoWindow } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker, InfoWindow, Polygon } from "@react-google-maps/api";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { MapState } from "../types";
 
