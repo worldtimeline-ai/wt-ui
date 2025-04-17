@@ -57,7 +57,7 @@ const SidePanel = (props: any) => {
         <div className="flex flex-col gap-4 fixed left-10 top-20 w-1/4 bg-gray-700/70 p-2 rounded-lg">
             <h3 className="text-white text-center">Control Panel</h3>
             <div>
-                <Switch label='Freeze Updates' defaultChecked={startingUp} onChange={setStartingUp} />
+                <Switch name='freeze_auto_update' label='Freeze Auto Updates' defaultValue={startingUp} onChange={setStartingUp} />
             </div>
             <div ref={eventsWrapperRef} className={`collapse ${!collapseState.events ? 'collapse-open' : 'collapse-close'} `}>
                 <div className="cursor-pointer text-xs" onClick={() => setCollapseState((prev) => ({ ...prev, events: false }))}>
