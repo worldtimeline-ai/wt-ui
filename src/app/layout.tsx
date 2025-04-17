@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Clarity from '@microsoft/clarity';
+import ClarityInit from '../components/ClarityInit';
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -31,10 +31,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  Clarity.init(process.env.NEXT_PUBLIC_MS_CLARITY_PROJECT_ID ?? '');
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ClarityInit />
+        <div>{children}</div>
+      </body>
     </html>
   );
 }
